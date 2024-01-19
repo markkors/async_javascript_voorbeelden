@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Animation with Promises</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .animatedElement {
+            margin: 10px;
+            width: 50px;
+            height: 50px;
+            background-color: blue;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            user-select: none;
+            color: white;
+            border: 1px solid black;
+            border-radius: 10px;
+        }
+
+        #animatedElement1 {
+            background-color: red;
+        }
+
+        #animatedElement2 {
+            background-color: green;
+        }
+
+        .rotateAnimation {
+            animation: rotateAnimation 1s ease-in-out forwards;
+        }
+
+        @keyframes rotateAnimation {
+            to {
+                transform: rotate(calc(2 * 360deg));
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="animatedElement1" class="animatedElement"></div>
+        <div id="animatedElement2" class="animatedElement"</div>    
+    </div>
+    
+    <script>
+        
+        
+        class oDice {
+            constructor(id) {
+                this.dice = document.getElementById(id);
+                this.dicenr=null;
+                this.dice.addEventListener("click", () => {
+                    this.roll().then(() => {
+                        console.log('Animatie voltooid!');
+                    })
+                });
+            }
+        
+            roll() {
+                this.dice.innerHTML = '';
+                const dicenr = Math.floor(Math.random() * 6) + 1;
+
+                // Reset de animatie door de klasse toe te voegen en te verwijderen
+                this.dice.classList.remove('rotateAnimation');
+                this.dice.offsetWidth; // Forceer een reflow
+                this.dice.classList.add('rotateAnimation');
+
+                // Gebruik de Promise om het einde van de animatie te detecteren
+                return this.animateElement().then(() => {
+                    this.dice.innerHTML = dicenr;
+                    this.dicenr=dicenr;
+                });
+            }
+
+            animateElement() {
+                return new Promise(resolve => {
+                    // Wacht tot de animatie is voltooid
+                    function animationEndHandler() {
+                        // Roep resolve aan om de Promise op te lossen
+                        resolve();
+                    }
+                    this.dice.addEventListener('animationend', animationEndHandler);
+                });
+            }
+        }
+      
+
+        let d1 = new oDice('animatedElement1');
+        d1.roll().then(() => {
+            console.log(`Animatie 1 voltooid! -> nummer: ${d1.dicenr}`);
+            let d2 = new oDice('animatedElement2');
+            d2.roll().then(() => {
+                console.log(`Animatie 2 voltooid! -> nummer: ${d2.dicenr}`);
+            });
+        });
+        
+    </script>
+
+</body>
+
+</html>
