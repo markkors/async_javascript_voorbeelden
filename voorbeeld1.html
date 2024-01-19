@@ -36,13 +36,23 @@
             background-color: green;
         }
 
-        .rotateAnimation {
-            animation: rotateAnimation 1s ease-in-out forwards;
+        .rotateAnimation1 {
+            animation: rotateAnimation1 1s ease-in-out forwards;
         }
 
-        @keyframes rotateAnimation {
+        .rotateAnimation2 {
+            animation: rotateAnimation2 1s ease-in-out forwards;
+        }
+
+        @keyframes rotateAnimation1 {
             to {
                 transform: rotate(calc(2 * 360deg));
+            }
+        }
+
+        @keyframes rotateAnimation2 {
+            to {
+                transform: rotate(calc(4 * 360deg));
             }
         }
     </style>
@@ -59,12 +69,13 @@
         
         
         class oDice {
-            constructor(id) {
+            constructor(id,animation) {
                 this.dice = document.getElementById(id);
                 this.dicenr=null;
+                this.animation=animation;
                 this.dice.addEventListener("click", () => {
                     this.roll().then(() => {
-                        console.log('Animatie voltooid!');
+                        console.log(`Animatie voltooid! -> nummer: ${this.dicenr}`);
                     })
                 });
             }
@@ -74,9 +85,9 @@
                 const dicenr = Math.floor(Math.random() * 6) + 1;
 
                 // Reset de animatie door de klasse toe te voegen en te verwijderen
-                this.dice.classList.remove('rotateAnimation');
+                this.dice.classList.remove(this.animation);
                 this.dice.offsetWidth; // Forceer een reflow
-                this.dice.classList.add('rotateAnimation');
+                this.dice.classList.add(this.animation);
 
                 // Gebruik de Promise om het einde van de animatie te detecteren
                 return this.animateElement().then(() => {
@@ -97,11 +108,12 @@
             }
         }
       
-
-        let d1 = new oDice('animatedElement1');
+        // Maak een nieuw object aan
+        let d1 = new oDice('animatedElement1','rotateAnimation1');
         d1.roll().then(() => {
             console.log(`Animatie 1 voltooid! -> nummer: ${d1.dicenr}`);
-            let d2 = new oDice('animatedElement2');
+            // maak een nieuw object aan
+            let d2 = new oDice('animatedElement2','rotateAnimation2');
             d2.roll().then(() => {
                 console.log(`Animatie 2 voltooid! -> nummer: ${d2.dicenr}`);
             });
